@@ -1,5 +1,4 @@
-# MetaDetective
-
+# <img src="src/assets/incog.svg" width="35px"> MetaDetective 
 MetaDetective is a powerful and easy-to-use web application designed to help you extract and analyze meta tags from any URL. Built with Angular Universal (SSR) for optimal performance and SEO, MetaDetective allows users to quickly fetch, display, and generate meta tag code for any website.
 
 ## Table of Contents
