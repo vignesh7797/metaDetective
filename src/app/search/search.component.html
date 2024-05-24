@@ -1,0 +1,24 @@
+<div class="container pt-5">
+
+  <form (ngSubmit)="onSearch()" [formGroup]="formGroup">
+    <div class="card px-5 py-5 border-0">
+      <div class="d-flex justify-content-center align-items-center">
+        <input class="from-input" type="url" formControlName="url" placeholder="Web Address" />
+        <button type="submit" title="Search" class="from-button rounded-end">
+          <i class="bi bi-search"></i>
+        </button>
+      </div>
+
+      <p class="text-center mt-3 mb-0 text-secondary">Try on an example : <span role="" class="text-primary cursor-pointer"
+          (click)="onSearch('https://getbootstrap.com')">
+          getbootstrap.com
+        </span>
+      </p>
+
+      <span class="text-danger p-2 mt-2 bg-danger-subtle rounded"
+        *ngIf="isSubmitted && formGroup.controls['url'].dirty && !formGroup.controls['url'].valid">
+        Something's not right. Please check the address you entered.
+      </span>
+    </div>
+  </form>
+</div>

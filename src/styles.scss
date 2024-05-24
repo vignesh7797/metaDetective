@@ -1,0 +1,105 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "../node_modules/bootstrap-icons/font/bootstrap-icons.scss";
+
+html, body { height: 100%; }
+/* Primary color */
+:root {
+    --primary-color: #007BFF;
+    --secondary-color: #6C757D;
+    --success-color: #28A745;
+    --danger-color: #DC3545;
+    --warning-color: #FFC107;
+    --light-color: #F8F9FA;
+    --dark-color: #343A40;
+  }
+  
+  body {
+    font-family: 'Roboto', sans-serif;
+    color: var(--dark-color);
+    background-color: var(--light-color);
+  }
+  
+  a {
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+  
+  a:hover {
+    color: var(--primary-color-dark);
+  }
+  
+  header {
+    background-color: var(--light-color);
+    color: var(--primary-color);
+  }
+  
+  header a {
+    color: var(--light-color);
+  }
+  
+  button {
+    background-color: var(--primary-color);
+    color: var(--light-color);
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  button:hover, .btn:hover {
+    background-color: var(--primary-color-dark);
+
+    &:hover{
+      background-color: var(--primary-color);
+      filter: saturate(0.7);
+    }
+  }
+
+  .btn-sm{
+    padding: 0px 6px !important;
+    font-size: 20px;
+  }
+  
+  .text-primary{
+    color: var(--primary-color);
+  }
+
+  .text-danger{
+    color: var(--danger-color);
+  }
+
+  .title{
+    font-size: 34px !important;
+    color: var(--primary-color) !important;
+  }
+
+  .from-input{
+    width: 40vw;
+    height: 50px;
+    padding: 10px;
+    border: 1px solid #007BFF;
+    border-radius: 6px 0 0 6px;
+    outline: none;
+    color: #343A40;
+  }
+
+  .from-button{
+    height: 50px;
+    aspect-ratio: 1 / 1;
+    background: var(--primary-color);
+    font-size: 20px;
+    font-weight: bold;
+    padding: 0;
+    border-radius: 0 6px 6px 0;
+
+    &:hover{
+      background: var(--primary-color);
+      filter: brightness(1.2);
+    }
+  }
+
+  .bubble{
+    background: var(--primary-color);
+    border-radius: 15px;
+    border-bottom-right-radius: 0px;
+  }

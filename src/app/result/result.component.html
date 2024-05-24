@@ -1,0 +1,246 @@
+<section class="mt-5">
+    <app-search [url]="url"></app-search>
+</section>
+
+<section>
+    <div class="container p-4">
+        <div class="d-flex align-items-center">
+            <button class="btn-sm rounded shadow">
+                <i class="bi bi-star-fill"></i>
+            </button>
+            <p class="fs-4 mb-0 ms-2 fw-semibold">Social Card Preview</p>
+        </div>
+        <p class="opacity-50">This is how your website could look like when someone shares it.</p>
+
+        <div class="row justify-content-center mt-5">
+            <div class="card shadow border- p-0" style="width: 28rem;">
+                <img class="card-img" [src]="result['og:image']" alt="" onerror="this.src='assets/bg-fill.svg'">
+                <p class="card-title fs-6 fw-bold px-3 mb-2 w-100 text-wrap">
+                    {{result['title'] | truncate}}
+                </p>
+                <p class="card-text px-3 opacity-75 mb-2">
+                    <small>{{result['description'] | truncate:[150]}}</small>
+                </p>
+                <p class="opacity-50 text-secondary px-3 mb-2">
+                    <small>{{result['og:url']}}</small>
+                </p>
+            </div>
+        </div>
+
+
+
+        <!--Title -->
+
+        <div class="d-flex align-items-center mt-5">
+            <button class="btn-sm rounded shadow">
+                <i class="bi bi-fonts"></i>
+            </button>
+            <p class="fs-4 mb-0 ms-2 fw-semibold">Title</p>
+        </div>
+
+        <p class="opacity-50">
+            Your website’s “name”. While it should be a bit descriptive, try to limit it at 50 characters.
+        </p>
+
+        <div class="copy-card">
+            <p #title class="fs-6 fw-semibold mb-0">
+                {{result['title']}}
+            </p>
+
+            <a #btn_title role="button" class="text-right copy" (click)="copyToClipboard(title, btn_title, tool_title)"
+                (mouseenter)="toggleToolTip(btn_title, tool_title, true)"
+                (mouseleave)="toggleToolTip(btn_title, tool_title, false)" aria-describedby="tooltip">
+                <i class="bi bi-clipboard"></i>
+            </a>
+
+            <div #tool_title class="tooltip" id="tooltip" role="tooltip">
+                Copy to Clipboard
+                <div id="arrow" data-popper-arrow></div>
+            </div>
+        </div>
+
+        <!-- Description -->
+        <div class="d-flex align-items-center mt-5">
+            <button class="btn-sm rounded shadow">
+                <i class="bi bi-text-left"></i>
+            </button>
+            <p class="fs-4 mb-0 ms-2 fw-semibold">Description</p>
+        </div>
+
+        <p class="opacity-50">
+            A short summary to get people an idea of what to expect when visiting your website. Try to limit it at 100
+            characters.
+        </p>
+
+        <div class="copy-card">
+            <p #desc  class="fs-6 fw-semibold mb-0">
+                {{result['description']}}
+            </p>
+
+            <a #btn_desc role="button" class="text-right copy" (click)="copyToClipboard(desc, btn_desc, tool_desc)"
+                (mouseenter)="toggleToolTip(btn_desc, tool_desc, true)"
+                (mouseleave)="toggleToolTip(btn_desc, tool_desc, false)"
+                aria-describedby="tooltip">
+                <i class="bi bi-clipboard"></i>
+            </a>
+
+            <div #tool_desc class="tooltip" id="tooltip" role="tooltip">
+                Copy to Clipboard
+                <div id="arrow" data-popper-arrow></div>
+            </div>
+        </div>
+
+        <!-- Image -->
+        <div class="d-flex align-items-center mt-5">
+            <button class="btn-sm rounded shadow">
+                <i class="bi bi-image-alt"></i>
+            </button>
+            <p class="fs-4 mb-0 ms-2 fw-semibold">Image</p>
+        </div>
+
+        <p class="opacity-50">
+            This image is the first thing people will see when someone shares your website. Make sure it stands out.
+            Sometimes social websites fallback to a random image from your website, so this is quite important.
+        </p>
+
+        <div class="copy-card">
+            <p #web class="fs-6 fw-semibold mb-0">
+                {{result['og:image']}}
+            </p>
+
+            <a #btn_web role="button" class="text-right copy" (click)="copyToClipboard(web, btn_web, tool_web)"
+                (mouseenter)="toggleToolTip(btn_web, tool_web, true)" 
+                (mouseleave)="toggleToolTip(btn_web, tool_web, false)"
+                aria-describedby="tooltip">
+                <i class="bi bi-clipboard"></i>
+            </a>
+
+            <div #tool_web class="tooltip" id="tooltip" role="tooltip">
+                Copy to Clipboard
+                <div id="arrow" data-popper-arrow></div>
+            </div>
+        </div>
+
+        <div class="card shadow border-0 p-0 mt-3" style="width: 22rem;">
+
+            <img class="card-img" [src]="result['og:image']" alt="" onerror="this.src='assets/bg-fill.svg'">
+        </div>
+
+        <!-- Website Address -->
+        <div class="d-flex align-items-center mt-5">
+            <button class="btn-sm rounded shadow">
+                <i class="bi bi-link-45deg"></i>
+            </button>
+            <p class="fs-4 mb-0 ms-2 fw-semibold">Website Address</p>
+        </div>
+
+        <p class="opacity-50 fs-5">
+            The address will type in to get to your website.
+        </p>
+
+        <div class="copy-card">
+            <p #img class="fs-6 fw-semibold mb-0">
+                {{result['og:url']}}
+            </p>
+
+            <a #btn_img role="button" class="text-right copy" (click)="copyToClipboard(img, btn_img, tool_img)"
+                (mouseenter)="toggleToolTip(btn_img, tool_img, true)" 
+                (mouseleave)="toggleToolTip(btn_img, tool_img, false)"
+                aria-describedby="tooltip">
+                <i class="bi bi-clipboard"></i>
+            </a>
+
+            <div #tool_img class="tooltip" id="tooltip" role="tooltip">
+                Copy to Clipboard
+                <div id="arrow" data-popper-arrow></div>
+            </div>
+        </div>
+
+
+        <!-- Meta tags -->
+        <div class="d-flex align-items-center mt-5">
+            <button class="btn-sm rounded shadow">
+                <i class="bi bi-code-slash"></i>
+            </button>
+            <p class="fs-4 mb-0 ms-2 fw-semibold">Meta Tags</p>
+        </div>
+
+        <p class="opacity-50">
+            Follow the simple three step process and let your website shine.
+        </p>
+
+        <div class="code-card shadow">
+
+            <article class="code" #article>
+
+                <p class="command">&lt;!-- HTML Meta Tags --&gt;</p>
+                <ng-container *ngFor="let tag of allTags | keyvalue">
+
+
+                    <ng-container *ngIf="tag.key == 'title'">
+                        &lt;<span class="meta">title</span>&gt; <span> {{tag.value}}"</span> &lt;/<span
+                            class="meta">title</span> &gt;
+                    </ng-container>
+
+                    <br>
+
+                    <ng-container
+                        *ngIf="tag.key !== 'google' && tag.key !== 'facebook' && tag.key !== 'twitter' && tag.key !== 'html' && tag.key !== 'title'">
+                        &lt;<span class="meta">meta</span>&nbsp;<span class="attr"> name </span> = "<span
+                            class="value">{{tag.key}}</span>"&nbsp;<span class="attr">content </span> = "<span
+                            class="value">{{tag.value}}</span>"&gt; &lt;/ <span class="meta">meta</span> &gt;
+                    </ng-container>
+
+                    <ng-container *ngIf="tag.key == 'html' || tag.key == 'twitter' ">
+                        <p class="command" *ngIf="tag.key == 'twitter'">&lt;!-- Twitter Meta Tags --&gt;</p> <br
+                            *ngI="tag.key == 'twitter'" />
+
+                        <ng-container *ngFor="let tg of (tag.value || {}) | keyvalue">
+                            &lt;<span class="meta">meta</span>&nbsp;<span class="attr"> name </span> = "<span
+                                class="value">{{tg.key}}</span>"&nbsp;<span class="attr">content </span> = "<span
+                                class="value">{{tg.value}}</span>"&gt; &lt;/<span class="meta">meta</span>&gt;
+                            <br>
+                        </ng-container>
+                    </ng-container>
+
+                    <ng-container *ngIf="tag.key == 'google'  ">
+                        <p class="command">&lt;!-- Google / Search Engine Tags --&gt;</p> <br>
+
+                        <ng-container *ngFor="let tg of (tag.value || {}) | keyvalue">
+                            &lt;<span class="meta">meta</span>&nbsp;<span class="attr"> itemprop </span> = "<span
+                                class="value">{{tg.key}}</span>"&nbsp;<span class="attr">content </span> = "<span
+                                class="value">{{tg.value}}</span>"&gt; &lt;/<span class="meta">meta</span>&gt;
+                        </ng-container>
+                    </ng-container>
+
+                    <ng-container *ngIf="tag.key == 'facebook'  ">
+                        <p class="command">&lt;!-- Facebook Meta Tags --&gt;</p> <br>
+
+                        <ng-container *ngFor="let tg of (tag.value || {}) | keyvalue">
+                            &lt;<span class="meta">meta</span>&nbsp;<span class="attr"> property </span> = "<span
+                                class="value">{{tg.key}}</span>"&nbsp;<span class="attr">content </span> = "<span
+                                class="value">{{tg.value}}</span>"&gt; &lt;/<span class="meta">meta</span>&gt;
+                            <br>
+                        </ng-container>
+                    </ng-container>
+
+                </ng-container>
+            </article>
+
+            <a #btn role="button" class="text-right copy" (click)="copyToClipboard(article, btn, tooltip)"
+                (mouseenter)="toggleToolTip(btn, tooltip, true)" (mouseleave)="toggleToolTip(btn, tooltip, false)"
+                aria-describedby="tooltip">
+                <i class="bi bi-clipboard"></i>
+            </a>
+            <div #tooltip class="tooltip" id="tooltip" role="tooltip">
+                Copy to Clipboard
+                <div id="arrow" data-popper-arrow></div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="mt-5">
+    <app-content></app-content>
+</section>

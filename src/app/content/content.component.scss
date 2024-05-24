@@ -1,0 +1,20 @@
+.container{
+    p{
+        font-size: 14px;
+        line-height: 1.5 !important;
+        text-align: justify;
+    }
+
+    span, .question{
+        font-size: 16px;
+
+    }
+}
+
+@media only screen and  (max-width : 600px) {
+    .arrow{
+        transform: rotate(90deg);
+        width: 100%;
+        text-align: center;
+    }
+}
