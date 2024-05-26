@@ -150,7 +150,8 @@
           "builder": "@nguniversal/builders:prerender",
           "options": {
             "routes": [
-              "/"
+              "/", 
+              "/getbootstrap.com"
             ]
           },
           "configurations": {
