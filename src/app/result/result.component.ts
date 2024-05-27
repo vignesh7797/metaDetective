@@ -3,6 +3,8 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { MetaService } from '../services/meta.service';
 import { createPopper } from '@popperjs/core';
 import { isPlatformBrowser } from '@angular/common';
+import { AxiosService } from '../services/axios.service';
+import { CheerioService } from '../services/cheerio.service';
 
 @Component({
   selector: 'app-result',
@@ -22,7 +24,7 @@ export class ResultComponent {
   }
 
 
-  constructor(private route: ActivatedRoute, private metaService: MetaService,
+  constructor(private route: ActivatedRoute, private axiosService: AxiosService, private cheerioService: CheerioService,
     @Inject(PLATFORM_ID) private platformId: any,
     @Inject('LOCALSTORAGE') private localStorage: any) {
 
@@ -38,24 +40,29 @@ export class ResultComponent {
   }
 
   getMetaTags(url: any) {
-    this.metaService.getMetaTags(url).subscribe(
-      data => {
-        console.log("success....")
-        console.log(data)
-        this.result = data;
-        this.generateMetaTags();
-        if (isPlatformBrowser(this.platformId)) localStorage.clear();
-      },
-      error => {
-        console.log(error);
-        if (isPlatformBrowser(this.platformId)) {
-          window.localStorage.setItem('error', "Something's not right. Please check if the address is already exist.")
-        }
-        console.log('error', "Something's not right. Please check if the address is already exist.")
+    this.axiosService.get(url)
+      .then(response => {
+        const $ = this.cheerioService.parseHTML(response.data);
+        const metaTags: any = {};
+        $('meta').each((i: any, elem: any) => {
+          const name = $(elem).attr('name') || $(elem).attr('property');
+          const content = $(elem).attr('content');
+          if (name && content) {
+            metaTags[name] = content;
+          }
+        });
+  
+        metaTags["title"] = $("title").text();
 
-        // window.location.assign(window.location.origin + '/');
+        console.log(metaTags);
+        this.result = metaTags;
       })
+      .catch(error => {
+        console.error(error);
+      });
   }
+
+
 
   generateMetaTags() {
     console.log(this.allTags)

@@ -11,6 +11,10 @@ import { SearchComponent } from './search/search.component';
 import { ContentComponent } from './content/content.component';
 import { ResultComponent } from './result/result.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
+import { MetaService } from './services/meta.service';
+import { Axios } from 'axios';
+import { AxiosService } from './services/axios.service';
+import { CheerioService } from './services/cheerio.service';
 
 @NgModule({
   declarations: [
@@ -29,7 +33,7 @@ import { TruncatePipe } from './pipes/truncate.pipe';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [{ provide: 'LOCALSTORAGE', useFactory: getLocalStorage }],
+  providers: [MetaService, AxiosService, CheerioService, { provide: 'LOCALSTORAGE', useFactory: getLocalStorage }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

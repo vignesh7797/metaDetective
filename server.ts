@@ -52,7 +52,7 @@ export function app(): express.Express {
 
         metaTags["title"] = $("title").text();
 
-      res.json(metaTags);
+      res.json(JSON.stringify(metaTags));
 
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch meta tags' });
