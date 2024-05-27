@@ -12,7 +12,7 @@
     "prerender": "ng run metaDetective:prerender",
     "serve:ssr:dev": "concurrently \"ng build --watch --configuration development\" \"nodemon --watch dist --exec 'node dist/metaDetective/server/main.js'\"",
     "clean": "rimraf dist",
-    "prod:build:ssr" :  "ng build --configuration production && ng run metaDetective:server:production"
+    "prod:build:ssr": "ng build --configuration production && ng run metaDetective:server:production"
   },
   "private": true,
   "dependencies": {
@@ -32,6 +32,7 @@
     "bootstrap-icons": "^1.11.3",
     "cheerio": "^1.0.0-rc.12",
     "express": "^4.15.2",
+    "firebase": "^10.12.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
