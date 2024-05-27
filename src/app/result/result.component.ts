@@ -40,6 +40,7 @@ export class ResultComponent {
   getMetaTags(url: any) {
     this.metaService.getMetaTags(url).subscribe(
       data => {
+        console.log("success....")
         console.log(data)
         this.result = data;
         this.generateMetaTags();
@@ -50,8 +51,9 @@ export class ResultComponent {
         if (isPlatformBrowser(this.platformId)) {
           window.localStorage.setItem('error', "Something's not right. Please check if the address is already exist.")
         }
+        console.log('error', "Something's not right. Please check if the address is already exist.")
 
-        window.location.assign(window.location.origin + '/');
+        // window.location.assign(window.location.origin + '/');
       })
   }
 
