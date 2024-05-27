@@ -46,7 +46,9 @@ export class SearchComponent {
       let redirect = window.location.origin +'/'+ encodeURIComponent(domain);
       
       this.isSubmitted = false;
-      window.location.assign(redirect)
+      // window.location.assign(redirect);
+
+      this.router.navigate(['/'+ encodeURIComponent(domain)])
     }
   }
 

@@ -24,6 +24,15 @@
       "dom"
     ]
   },
+  "include": [
+    "src/**/*.ts", 
+    "functions/src/**/*.ts",
+    "functions/dist/**/*.js",
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
