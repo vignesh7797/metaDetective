@@ -12,7 +12,7 @@ export class MetaService {
   constructor(private http : HttpClient) { }
 
   getMetaTags(url:any):Observable<any[]>{
-    return this.http.get<any[]>(`/api/meta-tags?url=${encodeURIComponent(url)}`)
+    return this.http.get<any>(`/api/meta-tags?url=${encodeURIComponent(url)}`, {headers:{'Content-Type': 'application/ json'}})
   }
 
 
