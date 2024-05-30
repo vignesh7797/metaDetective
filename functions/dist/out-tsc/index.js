@@ -14,16 +14,17 @@
 //   logger.info("Hello logs!", {structuredData: true});
 //   response.send("Hello from Firebase!");
 // });
-// import * as functions from "firebase-functions";
-// import * as express from "express";
-// import {join} from "path";
-// import {readFileSync} from "fs";
+import * as functions from "firebase-functions";
+import * as express from "express";
+import {join} from "path";
+import {readFileSync} from "fs";
 // // Import Angular Universal server module
-// import {ngExpressEngine} from "@nguniversal/express-engine";
-// import * as provideModuleMap from "@nguniversal/module-map-ngfactory-loader";
+import {ngExpressEngine} from "@nguniversal/express-engine";
+import * as provideModuleMap from "@nguniversal/module-map-ngfactory-loader";
 // // Import the main server module
-// import {AppServerModuleNgFactory} from "../../dist/metaDetective/server"
-// import {LAZY_MODULE_MAP} from "./dist/metaDetectiveserver/server/main";
+import {AppServerModuleNgFactory} from "./dist/metaDetective/server";
+import {LAZY_MODULE_MAP} from "./dist/metaDetectiveserver/server/main";
+import * as cors from "cors";
 // // Import the main server module
 // const app = express();
 // // Set the engine
@@ -43,3 +44,37 @@
 // });
 // exports.ssr = functions.https.onRequest(app);
 // # sourceMappingURL=index.js.map
+
+
+// const functions = require("firebase-functions");
+// const express = require("express");
+// const { ngExpressEngine } = require("@nguniversal/express-engine");
+// const { provideModuleMap } = require("@nguniversal/module-map-ngfactory-loader");
+// const { join } = require("path");
+// const cors = require("cors");
+const app = express();
+
+const distFolder = join(process.cwd(), "dist/metaDetective/browser");
+const indexHtml = join(distFolder, "index.html");
+
+app.use(cors());
+
+app.engine("html", ngExpressEngine({
+  bootstrap: AppServerModuleNgFactory,
+  providers: [
+    provideModuleMap(LAZY_MODULE_MAP),
+  ],
+}));
+
+app.set("view engine", "html");
+app.set("views", distFolder);
+
+app.get("*.*", express.static(distFolder, {
+  maxAge: "1y",
+}));
+
+app.get("*", (req, res) => {
+  res.render(indexHtml, {req});
+});
+
+exports.ssrFunction = functions.https.onRequest(app);

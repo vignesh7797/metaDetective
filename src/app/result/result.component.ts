@@ -5,6 +5,8 @@ import { createPopper } from '@popperjs/core';
 import { isPlatformBrowser } from '@angular/common';
 import { AxiosService } from '../services/axios.service';
 import { CheerioService } from '../services/cheerio.service';
+import { next } from 'cheerio/lib/api/traversing';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-result',
@@ -23,17 +25,28 @@ export class ResultComponent {
     twitter: {}
   }
 
+  isLoading = false
 
-  constructor(private route: ActivatedRoute, private axiosService: AxiosService, private cheerioService: CheerioService,
+
+  constructor(private route: ActivatedRoute, private meta:MetaService, private axiosService: AxiosService, private cheerioService: CheerioService,
     @Inject(PLATFORM_ID) private platformId: any,
     @Inject('LOCALSTORAGE') private localStorage: any) {
 
     this.route.paramMap.subscribe((params: ParamMap | any) => {
       this.url = 'https://' + decodeURIComponent(params.get('url'));
-      console.log(this.url);
 
       if (this.url) {
-        this.getMetaTags(this.url);
+
+        this.isLoading = true;
+  
+        this.meta.getDatas(this.url)
+        .then((result:any) =>{
+           this.result = result.metaTags;
+           this.generateMetaTags();
+           this.isLoading = false;
+        }).catch(error =>{
+          this.isLoading = false;
+        });
       }
     });
 
@@ -54,11 +67,10 @@ export class ResultComponent {
   
         metaTags["title"] = $("title").text();
 
-        console.log(metaTags);
-        this.result = metaTags;
+        console.log('Result', metaTags);
       })
       .catch(error => {
-        console.error(error);
+        console.error('Error', error);
       });
   }
 

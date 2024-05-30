@@ -3,7 +3,7 @@
 </section>
 
 <section>
-    <div class="container p-4">
+    <div class="container p-4" *ngIf="!isLoading">
         <div class="d-flex align-items-center">
             <button class="btn-sm rounded shadow">
                 <i class="bi bi-star-fill"></i>
@@ -193,7 +193,7 @@
 
                     <ng-container *ngIf="tag.key == 'html' || tag.key == 'twitter' ">
                         <p class="command" *ngIf="tag.key == 'twitter'">&lt;!-- Twitter Meta Tags --&gt;</p> <br
-                            *ngI="tag.key == 'twitter'" />
+                            *ngIf="tag.key == 'twitter'" />
 
                         <ng-container *ngFor="let tg of (tag.value || {}) | keyvalue">
                             &lt;<span class="meta">meta</span>&nbsp;<span class="attr"> name </span> = "<span
@@ -238,6 +238,10 @@
             </div>
         </div>
 
+    </div>
+
+    <div class="w-100 p-5 d-inline-flex justify-content-center" *ngIf="isLoading">
+        <img src="assets/loading.gif" alt="Loading" width="200">
     </div>
 </section>
 

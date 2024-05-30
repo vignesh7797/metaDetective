@@ -5,13 +5,20 @@ import { ngExpressEngine } from '@nguniversal/express-engine';
 import * as express from 'express';
 import { existsSync } from 'fs';
 import { join } from 'path';
+import * as cors  from 'cors';
 
 import { AppServerModule } from './src/main.server';
+import { AxiosRequestConfig } from 'axios';
+import { handler } from './handler';
+
+import { environment } from './src/environments/environment'
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
-  const distFolder = join(process.cwd(), 'dist/metaDetective/browser');
+  const websiteFileLocation = environment.production ? "browser" : "dist/metaDetective/browser";
+  server.use(cors());
+  const distFolder = join(process.cwd(), websiteFileLocation);
   const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
 
   // Our Universal express-engine (found @ https://github.com/angular/universal/tree/main/modules/express-engine)
@@ -29,6 +36,8 @@ export function app(): express.Express {
     maxAge: '1y'
   }));
 
+  server.get('/api/**', handler);
+
   server.get('/api/meta-tags', async (req, res) => {
     const { url } = req.query;
 
@@ -36,8 +45,8 @@ export function app(): express.Express {
 
       const axios = require('axios');
       const cheerio = require('cheerio');
-
-      const response = await axios.get(url);
+      const config: AxiosRequestConfig = {headers : {'Access-Control-Allow-Origin': "*"}}
+      const response = await axios.get(url, config);
       const html = response.data;
       const $ = cheerio.load(html);
 

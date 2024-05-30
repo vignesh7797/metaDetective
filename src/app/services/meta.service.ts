@@ -1,8 +1,15 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Renderer2, inject } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Inject, Injectable, Optional, PLATFORM_ID, Renderer2, inject } from '@angular/core';
+import { DomSanitizer, TransferState, makeStateKey } from '@angular/platform-browser';
 import axios, { AxiosRequestConfig, AxiosPromise } from 'axios';
-// import * as cheerio from 'cheerio';
+import { firstValueFrom, map, of, tap } from 'rxjs';
+import { User } from 'firebase/auth';
+import { REQUEST } from '@nguniversal/express-engine/tokens';
+import { DOCUMENT, isPlatformServer } from '@angular/common';
+import { StateService } from './state.service';
+import { environment } from 'src/environments/environment';
+
+declare const Zone: any;
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +20,56 @@ export class MetaService {
 
   http = inject(HttpClient);
 
+  data!: string;
+  isServer: Boolean;
+  baseURL!: string;
 
-  constructor() { }
+
+  constructor(private state: StateService, @Inject(PLATFORM_ID) platformId: Object, private transferState: TransferState, @Optional() @Inject(REQUEST) private request: any,
+  @Inject(DOCUMENT) private document: Document) { 
+    this.isServer = isPlatformServer(platformId);
+    
+    // get base url
+    if (this.isServer) {
+      this.baseURL = this.request.headers.referer;
+    } else {
+      this.baseURL = this.document.location.origin + '/';
+    }
+
+    // grab data
+    // this.getData().then((data) => this.data = data.r);
+  }
+  async getDatas(url:any): Promise<any> {
+    return await firstValueFrom(
+      this.http.post(environment.baseURL + '/fetch-meta', {url : url} , {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        responseType: 'json'
+      })
+    );
+  };
+
+
 
   getMetaTags(url:any){
 
-    return this.processMetas(url);
+    // return this.processMetas(url);
     // return this.http.get<any>(`/api/meta-tags?url=${encodeURIComponent(url)}`, {headers:{'Content-Type': 'application/json'}})
+  
+    const DATA_KEY = makeStateKey<User | null>('user');
+
+    if (this.transferState.hasKey(DATA_KEY)) {
+      const user = this.transferState.get(DATA_KEY, null);
+      return of(this.transferState.get(DATA_KEY, null));
+    } else {
+      return this.http.get(`/api/meta-tags?url=${encodeURIComponent(url)}`, {headers:{'Content-Type': 'application/json'}}).pipe(
+        map(data => {
+          this.transferState.set(DATA_KEY, data);
+          return data;
+        })
+      );
+    }
   }
 
 
@@ -29,58 +79,44 @@ export class MetaService {
     return !!pattern.test(url)
   }
 
-   processMetas(url:string){
+  async getData(): Promise<void> {
 
-    this.getAxios(url).then(
-      response =>{
-        console.log(response)
-        const html = response.data;
-        // this.parseHTML(html);
-        // const $ = cheerio.load(html);
+    if (this.isServer) {
 
-        // const metaTags:any = {}
+      //
+      // get data on server, save state
+      // get base url from request obj
+      //
 
-        // $('meta').each((i:any, elem:any) =>{
-        //   const name = $(elem).attr('name') || $(elem).attr('property');
-        //   const content = $(elem).attr('content');
+      const host: string = this.request.get('host');
+      this.baseURL = (host.startsWith('localhost') ? 'http://' : 'https://') + host;
+      this.data = await this.fetchData();
+      this.state.saveState('rest', this.data);
 
-        //   if(name && content){
-        //     metaTags[name] = content;
-        //   }
-        // });
+    } else {
 
-        // metaTags["title"] = $("title").text();
+      //
+      // retrieve state on browser
+      // get base url from location obj
+      //
 
-        // return metaTags;
-        return 'success'
+      if (this.state.hasState('rest')) {
+        this.data = this.state.getState('rest');
+      } else {
+        this.baseURL = this.document.location.origin;
+        this.data = await this.fetchData();
       }
-    ).catch(
-      error => {
-        console.log(error)
-      }
-    )
-
-    
+    }
   }
 
-
-  // parseHTML(html: string) {
-  //   // Sanitize HTML
-  //   const safeHtml = this.sanitizer.bypassSecurityTrustHtml(html);
-  
-  //   // Create a container element
-  //   const container = this.renderer.createElement('div');
-  
-  //   // Set HTML content to the container
-  //   this.renderer.setProperty(container, 'innerHTML', safeHtml.toString());
-  
-  //   // Now you can use standard DOM methods to manipulate the content
-  //   const element = container.querySelector('.some-selector');
-  //   console.log(element.textContent);
-  // }
-
-
-  getAxios(url:string):AxiosPromise{
-    return axios.get(url);
+  private async fetchData(): Promise<any> {
+    return (
+      await firstValueFrom<any>(this.http.get(this.baseURL + '/api/me', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        responseType: 'json'
+      }))
+    ).r;
   }
 }

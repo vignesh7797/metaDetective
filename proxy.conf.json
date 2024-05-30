@@ -1,0 +1,12 @@
+{
+    "/*": {
+        "target": "https://us-central1-meta-detective.cloudfunctions.net/",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "debug",
+        "router": "https://getbootstrap.com/"
+    },
+    "pathRewrite": {
+        "^/*": ""
+    }
+}

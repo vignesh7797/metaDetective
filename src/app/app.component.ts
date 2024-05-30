@@ -1,5 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { MetaService } from './services/meta.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,10 @@ export class AppComponent {
   errorMessage: any = '';
 
   constructor(@Inject(PLATFORM_ID) private platformId: any,
-    @Inject('LOCALSTORAGE') private localStorage: any) {
+    @Inject('LOCALSTORAGE') private localStorage: any,
+  private meta:MetaService) {
+
+    console.log(this.meta.data);
 
     if (isPlatformBrowser(this.platformId)) {
       if (localStorage.getItem('error')) {
